@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import user.dao.UserDao;
+import user.service.UserService;
 
 @Configuration
 public class AppContext {
@@ -23,6 +24,11 @@ public class AppContext {
 		dataSource.setPassword("123456");
 		
 		return dataSource;
+	}
+	
+	@Bean
+	public UserService userService() {
+		return new UserService();
 	}
 	
 	@Bean
