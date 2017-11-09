@@ -8,5 +8,6 @@
 </head>
 <body>
 	<h2> !! 가입 축하 !! </h2>
+	<a href="/">홈으로</a>
 </body>
 </html>

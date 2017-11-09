@@ -12,5 +12,8 @@
 	<mvc:default-servlet-handler/>
 		
 	<bean class="controller.AuthController"/>
+	<bean class="controller.MainController"/>
+	<bean class="controller.BoardController"/>
+	
 
 </beans>

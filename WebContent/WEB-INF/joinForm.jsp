@@ -14,13 +14,13 @@
 			
 			<p>비밀번호 : <input name="password" type="password" /> </p>
 			
-			<p>이름 : <input name="name" type="text" value="${user.password}"/></p>
+			<p>이름 : <input name="name" type="text" value="${user.userInfo.name}"/></p>
 		
-			<p>이메일 : <input name="email" type="email" value="${user.email}"/></p>
+			<p>이메일 : <input name="email" type="email" value="${user.userInfo.email}"/></p>
 			
-			<p>닉네임 : <input name="subName" type="text" value="${user.subName}"/></p>
+			<p>닉네임 : <input name="subName" type="text" value="${user.userInfo.subName}"/></p>
 			
-			<p>전화번호 : <input name="phoneNumber" type="text" value="${user.phoneNumber}"/></p>
+			<p>전화번호 : <input name="phoneNumber" type="text" value="${user.userInfo.phoneNumber}"/></p>
 			
 			<input type="submit"/>
 		</form>
