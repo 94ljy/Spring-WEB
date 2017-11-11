@@ -26,8 +26,8 @@ public class BoardServiceTest {
 	
 	@Test
 	public void countBoard() {
-		Board board1 = boardService.getBoard("3");
-		Board board2 = boardService.getBoard("3");
+		Board board1 = boardService.getBoard(3);
+		Board board2 = boardService.getBoard(3);
 
 		assertThat(board1.getBoardCount(), is(not(board2.getBoardCount())));
 	}

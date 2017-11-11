@@ -1,26 +1,94 @@
 package controller;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import board.domain.Board;
 import board.domain.BoardTable;
+import board.domain.Reply;
 import board.service.BoardService;
+import user.domain.User;
 
 @Controller
+@RequestMapping(value="/board")
 public class BoardController {
 
 	@Autowired
 	BoardService boardService;
+
 	
-	@RequestMapping(value="/board", method=RequestMethod.GET)
-	public String board(@RequestParam(defaultValue="1") int nowPage, ModelMap model) {
-		BoardTable boardTable = boardService.getBoardTable(nowPage);
+	@RequestMapping(value= {"/{page}", ""}, method=RequestMethod.GET)
+	public String board(@PathVariable Optional<Integer> page, ModelMap model) {
+		int requestPage = 1;
+		if(page.isPresent()) requestPage = page.get();
+		
+		BoardTable boardTable = boardService.getBoardTable(requestPage);
 		model.addAttribute("boardTable", boardTable);
-		return "/WEB-INF/board.jsp";
+		return "/WEB-INF/boardList.jsp";
+	}
+	
+	@RequestMapping(value="/write", method=RequestMethod.GET)
+	public String writeForm(HttpSession session) {
+		String url;
+		if(session.getAttribute("user") == null)
+			url = "redirect:/board";
+		else
+			url = "/WEB-INF/boardWrite.jsp";
+		
+		return url;
+	}
+	
+	@RequestMapping(value="/write", method=RequestMethod.POST)
+	public String write(Board board, HttpSession session) {
+		board.setUser((User)session.getAttribute("user"));
+		System.out.println(board.getBoardTitle());
+		boardService.addBoard(board);
+		
+		return "redirect:/board";
+	}
+	
+	@RequestMapping(value="/view/{boardNo}", method=RequestMethod.GET)
+	public String boardView(@PathVariable int boardNo, ModelMap model) {
+		Board board = boardService.getBoard(boardNo);
+		model.addAttribute("board", board);
+		model.addAttribute("replyTable", board.getReplyTable());
+		
+		return "/WEB-INF/boardView.jsp";
+	}
+	
+	
+	@RequestMapping(value="reply/write", method=RequestMethod.POST)
+	@ResponseBody
+	public String writeReply(@ModelAttribute Reply reply, int boardNo , HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		Board board = new Board();
+		board.setBoardNo(boardNo);
+		
+		reply.setUser(user);
+		reply.setBoard(board);
+		
+		boardService.writeReply(reply);
+		
+		return "{success : true}";
+	}
+	
+	@RequestMapping(value="reply/{boardNo}/page/{page}")
+	public String getReply(@PathVariable int boardNo,@PathVariable int page, ModelMap model) {
+		
+		model.addAttribute("replyTable", boardService.getReply(boardNo, page));
+		
+		return "/WEB-INF/boardReply.jsp";
 	}
 	
 }

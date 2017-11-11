@@ -1,18 +1,21 @@
 package board.domain;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import user.domain.User;
 
 public class Board {
-	private String boardNo;
+	private int boardNo;
 	private String boardTitle;
 	private String boardContent;
 	private Date boardTime;
 	private int boardCount;
 	private User user;
 	
+	private ReplyTable replyTable;
+
+
 	public Board() {}
 	
 	public Board(String boardTitle, String boardContent, User user) {
@@ -22,10 +25,11 @@ public class Board {
 	}
 	
 	
-	public String getBoardNo() {
+	
+	public int getBoardNo() {
 		return boardNo;
 	}
-	public void setBoardNo(String boardNo) {
+	public void setBoardNo(int boardNo) {
 		this.boardNo = boardNo;
 	}
 	public String getBoardTitle() {
@@ -57,6 +61,15 @@ public class Board {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	
+	public ReplyTable getReplyTable() {
+		return replyTable;
+	}
+
+	public void setReplyTable(ReplyTable replyTable) {
+		this.replyTable = replyTable;
 	}
 	
 }

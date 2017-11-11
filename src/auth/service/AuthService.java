@@ -23,4 +23,16 @@ public class AuthService {
 		return userDao.login(user);
 	}
 	
+	public boolean idCheck(String id) {
+		return userDao.idCheck(id);
+	}
+	
+	public boolean subNameCheck(String subName) {
+		return userDao.subNameCheck(subName);
+	}
+	
+	public User getUser(String id) {
+		return userDao.getUser(id);
+	}
+	
 }

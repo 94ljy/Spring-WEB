@@ -3,8 +3,6 @@ package user.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -73,6 +71,22 @@ public class UserDao {
 				new Object[] {user.getId(), user.getPassword()} ,Long.class);
 
 		return row == 1L ? true : false;
+	}
+	
+	public boolean idCheck(String id) {
+		long result = jdbcTemplate.queryForObject("select count(*) from user where id = ?", new Object[] {id}, Long.class);
+		
+		if(result == 1L) return false;
+		else return true;
+		
+	}
+	
+	public boolean subNameCheck(String subName) {
+		long result = jdbcTemplate.queryForObject("select count(*) from userinfo where subName = ?", new Object[] {subName}, Long.class);
+		
+		if(result == 1L) return false;
+		else return true;
+		
 	}
 	
 }

@@ -1,6 +1,6 @@
 package board.dao;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -40,8 +40,8 @@ public class BoardDaoTest {
 	
 	@Before
 	public void init() {
-		//TransactionDefinition txDefinition = new DefaultTransactionDefinition();
-		 //txStatus = transactionManager.getTransaction(txDefinition);
+		TransactionDefinition txDefinition = new DefaultTransactionDefinition();
+		txStatus = transactionManager.getTransaction(txDefinition);
 		user = new User("test", "test", "test", "test", "test", "test");
 		board1 = new Board("力格1", "郴侩1", user);
 		board2 = new Board("力格2", "郴侩2", user);
@@ -49,21 +49,21 @@ public class BoardDaoTest {
 	
 	@After
 	public void destroy() {
-		//transactionManager.rollback(txStatus);
+		transactionManager.rollback(txStatus);
 	}
 	
 	@Test
 	public void addBoard() {
-		long totalPage = boardDao.getTotalPage();
 		
+		long totalPage = boardDao.getTotalPage();
 		boardDao.addBoard(board1);
-		assertThat(boardDao.getTotalPage(), is(totalPage));
+		assertThat(boardDao.getTotalPage(), is(not(totalPage)));
 		
 	}
 	
 	//@Test
 	public void getBoard() {
-		Board getBoard1 = boardDao.getBoard("3");
+		Board getBoard1 = boardDao.getBoard(3);
 		assertThat(getBoard1.getBoardTitle(), is(board1.getBoardTitle()));
 	}
 	

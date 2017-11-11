@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,7 +6,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2> !! °¡ÀÔ ÃàÇÏ !! </h2>
-	<a href="/">È¨À¸·Î</a>
+	<h2> !! ê°€ìž… ì¶•í•˜ !! </h2>
+	<a href="/">í™ˆìœ¼ë¡œ</a>
 </body>
 </html>
