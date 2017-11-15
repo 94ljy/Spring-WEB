@@ -13,11 +13,15 @@
 </head>
 <body class="container" style="height: 100vh;">
 
+
+	
 	<div style="display: table; width: 100%; height: 100%;">
 		<div style="display:table-cell;  height: 75%; vertical-align: middle;">
-			<h2 style="text-align: right;">${ user.userInfo.subName }님 반갑습니다.</h2>
+			<h2 style="">게시판</h2>
+			<hr>
+			<h2 style="text-align: right;">${ user.subName }님 반갑습니다.</h2>
 			<button class="btn btn-default" style="float: right;" onclick="location.href='/auth/logout'">로그아웃</button>
-			<div class="board-list" style="">
+			<div class="board-list" style="min-height: 500px;">
 				<table class="table table-hover" style="margin: 0 auto; text-align: center;">
 					<thead>
 						<tr>
@@ -33,10 +37,10 @@
 							<c:forEach var="board" items="${boardTable.boardList}">
 								<tr>
 									<td>${board.boardNo }</td>
-									<td><a href="/board/view/${board.boardNo}">${board.boardTitle }</a></td>
+									<td><a href="/board/view/${board.boardNo}?page=${boardTable.nowPage}">${board.boardTitle }</a></td>
 									<td>${board.boardTime }</td>
 									<td>${board.boardCount }</td>
-									<td>${board.user.userInfo.subName }</td>
+									<td>${board.user.subName }</td>
 								</tr>
 							</c:forEach>
 						</c:when>
@@ -61,7 +65,7 @@
 						</c:forEach>			
 					</ul>
 				</div>
-				<div style="float: right;"><a href="/board/write">글쓰기</a></div>
+				<div class="btn btn-default"  style="float: right;"><a href="/board/write">글쓰기</a></div>
 			</div>
 		</div>
 	</div>

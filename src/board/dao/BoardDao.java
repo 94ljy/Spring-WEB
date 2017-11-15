@@ -2,8 +2,6 @@ package board.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import board.domain.Board;
 import board.domain.Reply;
 import user.domain.User;
-import user.domain.UserInfo;
 
 public class BoardDao {
 	@Autowired
@@ -24,13 +21,15 @@ public class BoardDao {
 		@Override
 		public Board mapRow(ResultSet row, int arg1) throws SQLException {
 			Board board = new Board();
+			board.setUser(new User());
+			
 			board.setBoardNo(row.getInt("board_no"));
 			board.setBoardTitle(row.getString("board_title"));
 			board.setBoardContent(row.getString("board_content"));
 			board.setBoardTime(row.getDate("board_time"));
 			board.setBoardCount(row.getInt("board_count"));
-			board.setUser(new User(row.getString("subName")));
 			board.getUser().setId(row.getString("id"));
+			board.getUser().setSubName(row.getString("subName"));
 			
 			return board;
 		}
@@ -41,12 +40,13 @@ public class BoardDao {
 		@Override
 		public Reply mapRow(ResultSet row, int arg1) throws SQLException {
 			Reply reply = new Reply();
+			reply.setUser(new User());
 			
 			reply.setReplyNo(row.getInt("reply_no"));
 			reply.setReplyContent(row.getString("reply_content"));
 			reply.setReplyDate(row.getDate("reply_date"));
-			reply.setUser(new User(row.getString("subName")));
 			reply.getUser().setId(row.getString("id"));
+			reply.getUser().setSubName(row.getString("subName"));
 			
 			return reply;
 		}
@@ -57,12 +57,13 @@ public class BoardDao {
 		@Override
 		public Board mapRow(ResultSet row, int arg1) throws SQLException {
 			Board board = new Board();
+			board.setUser(new User());
 	
 			board.setBoardNo(row.getInt("board_no"));
 			board.setBoardTitle(row.getString("board_title"));
 			board.setBoardTime(row.getDate("board_time"));
 			board.setBoardCount(row.getInt("board_count"));
-			board.setUser(new User(row.getString("subName")));
+			board.getUser().setSubName(row.getString("subName"));
 			
 			return board;
 		}
@@ -71,7 +72,8 @@ public class BoardDao {
 	
 	public void addBoard(Board board ) {
 		jdbcTemplate.update("insert into board(board_title, board_content, board_time, board_count, user_id) "
-				+ "values(?, ?, now(), 0, ?)", new Object[] { board.getBoardTitle(), board.getBoardContent(), board.getUser().getId()});
+				+ "values(?, ?, now(), 0, ?)"
+				, new Object[] { board.getBoardTitle(), board.getBoardContent(), board.getUser().getId() } );
 	}
 	
 	public Board getBoard(int boardNo) {
@@ -106,10 +108,14 @@ public class BoardDao {
 		return boards;
 	}
 	
+	public void boardDelete(Board board) {
+		jdbcTemplate.update("delete from board where board_no = ?", board.getBoardNo());
+	}
+	
 
 	public List<Reply> getReply(int boardNo, int page){
 		List<Reply> replys = jdbcTemplate.query(
-				"select r.reply_no, r.reply_content, r.reply_date, u.subName u.id"
+				"select r.reply_no, r.reply_content, r.reply_date, u.subName, u.id "
 			  + "from board b, reply r, userinfo u "
 			  + "where b.board_no = r.board_no and u.id = r.user_id and r.board_no = ? "
 			  + "order by r.reply_no desc "
@@ -122,9 +128,25 @@ public class BoardDao {
 		return (int)count;
 	}
 	
+	public boolean replyModify(Reply reply) {
+		int result = jdbcTemplate.update("update reply set reply_content = ? where reply_no = ?", reply.getReplyContent(), reply.getReplyNo());
+		return result > 1 ? true : false;
+	}
+	
+	public boolean replyDelete(Reply reply) {
+		int result = jdbcTemplate.update("delete from reply where reply_no = ?", reply.getReplyNo());
+		return result > 1 ? true : false;
+	}
+	
 	public void writeReply(Reply reply) {
 		jdbcTemplate.update("insert into reply(reply_content, reply_date, user_id, board_no) values(?, now(), ?, ?)"
 				, reply.getReplyContent(), reply.getUser().getId(), reply.getBoard().getBoardNo());
+	}
+	
+	public void updateBoard(Board board) {
+		jdbcTemplate.update("update board set board_title = ?, board_content = ? where board_no = ?"
+				, board.getBoardTitle(), board.getBoardContent(), board.getBoardNo());
+		
 	}
 	
 	

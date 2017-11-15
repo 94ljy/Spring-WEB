@@ -3,6 +3,7 @@ package auth.service;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +19,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import context.AppContext;
 import user.dao.UserDao;
 import user.domain.User;
+import user.domain.UserForm;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,9 +31,9 @@ public class AuthServiceTest {
 	PlatformTransactionManager transactionManager;
 	TransactionStatus txStatus;
 	
-	User user1;
-	User user2;
-	User user3;
+	UserForm user1;
+	UserForm user2;
+	UserForm user3;
 	
 	
 	@Before
@@ -39,9 +41,9 @@ public class AuthServiceTest {
 		DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
 		txStatus = transactionManager.getTransaction(definition);
 		
-		user1 = new User("user1", "1234", "蜡历1", "1234@gg.com", "subName1", "010-1111-1111");
-		user2 = new User("user2", "2222", "蜡历2", "2222@gg.com", "subName2", "010-2222-2222");
-		user3 = new User("user3", "3333", "蜡历2", "3333@gg.com", "subName3", "010-3333-3333");
+		user1 = new UserForm("user1", "1234", "蜡历1", "1234@gg.com", "subName1", "010-1111-1111");
+		user2 = new UserForm("user2", "2222", "蜡历2", "2222@gg.com", "subName2", "010-2222-2222");
+		user3 = new UserForm("user3", "3333", "蜡历2", "3333@gg.com", "subName3", "010-3333-3333");
 	}
 	
 	@After
@@ -59,8 +61,9 @@ public class AuthServiceTest {
 		isSameUser(user1, getUser1);
 		
 		try {
-			user2.setUserInfo(user1.getUserInfo());
+			user2.setSubName(user1.getSubName());
 			userDao.join(user2);
+			fail();
 		}catch(Exception e) {}
 		
 		assertThat(userDao.getUser(user2.getId()) , is(nullValue()));
@@ -69,10 +72,10 @@ public class AuthServiceTest {
 	
 	private void isSameUser(User user, User getUser) {
 		assertThat(user.getId(), is(getUser.getId()));
-		assertThat(user.getUserInfo().getName(), is(getUser.getUserInfo().getName()));
-		assertThat(user.getUserInfo().getEmail(), is(getUser.getUserInfo().getEmail()));
-		assertThat(user.getUserInfo().getSubName(), is(getUser.getUserInfo().getSubName()));
-		assertThat(user.getUserInfo().getPhoneNumber(), is(getUser.getUserInfo().getPhoneNumber()));
+		assertThat(user.getName(), is(getUser.getName()));
+		assertThat(user.getEmail(), is(getUser.getEmail()));
+		assertThat(user.getSubName(), is(getUser.getSubName()));
+		assertThat(user.getPhoneNumber(), is(getUser.getPhoneNumber()));
 	}
 	
 }

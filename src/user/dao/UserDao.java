@@ -9,19 +9,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import user.domain.User;
-import user.domain.UserInfo;
+import user.domain.UserForm;
+import user.domain.UserLogin;
 
 public class UserDao {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public void join(User user) {
+	public void join(UserForm user) {
 		jdbcTemplate.update("insert into user(id, password) values(?,?)"
 				, user.getId(), user.getPassword());
 		jdbcTemplate.update("insert into userinfo(id, name, email, subName, phoneNumber) values(?,?,?,?,?)"
-				, user.getId(), user.getUserInfo().getName(), 
-				user.getUserInfo().getEmail(), user.getUserInfo().getSubName(), user.getUserInfo().getPhoneNumber());
+				, user.getId(), user.getName(), 
+				user.getEmail(), user.getSubName(), user.getPhoneNumber());
 	}
 	
 	public User getUser(String id) {
@@ -33,13 +34,12 @@ public class UserDao {
 						@Override
 						public User mapRow(ResultSet row, int arg1) throws SQLException {
 							User user = new User();
-							user.setUserInfo(new UserInfo(user));
 							
 							user.setId(row.getString("id"));
-							user.getUserInfo().setName(row.getString("name"));
-							user.getUserInfo().setEmail(row.getString("email"));
-							user.getUserInfo().setSubName(row.getString("subName"));
-							user.getUserInfo().setPhoneNumber(row.getString("phoneNumber"));
+							user.setName(row.getString("name"));
+							user.setEmail(row.getString("email"));
+							user.setSubName(row.getString("subName"));
+							user.setPhoneNumber(row.getString("phoneNumber"));
 							
 							return user;
 						}
@@ -53,35 +53,33 @@ public class UserDao {
 		return this.getUser(user.getId());
 	}
 	
-	public long userCount() {
+	public long getUserCount() {
 		return jdbcTemplate.queryForObject("select count(*) from user", Long.class);
 	}
 	
-	public void update(User user) {
+	public void update(UserForm user) {
 		jdbcTemplate.update("update user set password = ? where id = ?", 
 				user.getPassword(), user.getId());
 		
 		jdbcTemplate.update("update userinfo set name = ?, email = ?, subName = ?, phoneNumber = ?  where id = ?", 
-				user.getUserInfo().getName(), user.getUserInfo().getEmail(), 
-				user.getUserInfo().getSubName(), user.getUserInfo().getPhoneNumber(), user.getId());
+				user.getName(), user.getEmail(), 
+				user.getSubName(), user.getPhoneNumber(), user.getId());
 	}
 	
-	public boolean login(User user) {
+	public boolean login(UserLogin user) {
 		long row = jdbcTemplate.queryForObject("select count(*) from user where id = ? and password = ?", 
-				new Object[] {user.getId(), user.getPassword()} ,Long.class);
+				new Object[] {user.getId(), user.getPassword()}, Long.class);
 
 		return row == 1L ? true : false;
 	}
 	
-	public boolean idCheck(String id) {
+	public boolean idOvelapCheck(String id) {
 		long result = jdbcTemplate.queryForObject("select count(*) from user where id = ?", new Object[] {id}, Long.class);
 		
-		if(result == 1L) return false;
-		else return true;
-		
+		return result == 1L ? false : true;
 	}
 	
-	public boolean subNameCheck(String subName) {
+	public boolean subNameOvelapCheck(String subName) {
 		long result = jdbcTemplate.queryForObject("select count(*) from userinfo where subName = ?", new Object[] {subName}, Long.class);
 		
 		if(result == 1L) return false;

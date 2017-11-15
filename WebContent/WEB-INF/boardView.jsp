@@ -31,6 +31,12 @@ hr {
 		});
 	}
 	
+	function boardDel(boardNo) {
+		if(confirm("게시글을 삭제합니다.")){
+			location.href="/board/del/"+boardNo;	
+		}
+	}
+	
 	
 	$(function() {
 		$('#writeReply').click(function() {
@@ -54,8 +60,7 @@ hr {
 	});
 </script>
 </head>
-<body
-	style="width: 100%; height: 100vh; margin: 0; padding: 0; align-items: center;">
+<body class="container">
 
 	<div class="board-view container" style="margin: 0 auto;">
 		<div class="board-title " style="margin-bottom: 15px;">
@@ -63,7 +68,7 @@ hr {
 		</div>
 		<hr>
 		<div class="board-info" style="padding-top: 4px; padding-bottom: 4px;">
-			<b> <span>닉네임 : ${board.user.userInfo.subName }님</span> <span
+			<b> <span>닉네임 : ${board.user.subName }님</span> <span
 				style="float: right;">작성일 : ${board.boardTime }</span> <span
 				style="float: right; margin-right: 10px;">조회수:${board.boardCount }</span>
 			</b>
@@ -71,6 +76,12 @@ hr {
 		<hr>
 		<div class="board-content" style="height: auto; min-height: 300px;">
 			<p>${board.boardContent }</p>
+		</div>
+		<div style="text-align: right;">
+			<c:if test="${user.id == board.user.id}">
+				<button class="btn btn-default" onclick="location.href='/board/modify/${board.boardNo}'">수정</button>
+				<button class="btn btn-default" onclick="boardDel(${board.boardNo})">삭제</button>
+			</c:if>
 		</div>
 		<hr>
 		<div class="board-reply">
@@ -83,7 +94,7 @@ hr {
 			</div>
 		</div>
 		<div>
-			<button class="btn btn-default" onclick="history.back()">뒤로가기</button>
+			<button class="btn btn-default" onclick="location.href='/board/${page}'">뒤로가기</button>
 		</div>
 	</div>
 

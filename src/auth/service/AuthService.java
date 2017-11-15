@@ -5,30 +5,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import user.dao.UserDao;
 import user.domain.User;
+import user.domain.UserForm;
+import user.domain.UserLogin;
 
 public class AuthService {
 	@Autowired
 	UserDao userDao;
 	
 	@Transactional
-	public void join(User userJoinForm) {
-		userDao.join(userJoinForm);
+	public void join(UserForm userForm) {
+		userDao.join(userForm);
 	}
 
-	public void update(User user) {
-		userDao.update(user);
+	public void update(UserForm userForm) {
+		userDao.update(userForm);
 	}
 	
-	public boolean login(User user) {
+	public boolean login(UserLogin user) {
 		return userDao.login(user);
 	}
 	
 	public boolean idCheck(String id) {
-		return userDao.idCheck(id);
+		return userDao.idOvelapCheck(id);
 	}
 	
 	public boolean subNameCheck(String subName) {
-		return userDao.subNameCheck(subName);
+		return userDao.subNameOvelapCheck(subName);
 	}
 	
 	public User getUser(String id) {

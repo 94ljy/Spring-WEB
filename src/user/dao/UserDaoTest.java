@@ -20,6 +20,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import context.AppContext;
 import user.domain.User;
+import user.domain.UserForm;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,9 +30,9 @@ public class UserDaoTest {
 	UserDao userDao;
 	@Autowired
 	PlatformTransactionManager transactionManager;
-	User user1;
-	User user2;
-	User user3;
+	UserForm user1;
+	UserForm user2;
+	UserForm user3;
 	TransactionStatus txStatus;
 	
 	@Before
@@ -39,9 +40,9 @@ public class UserDaoTest {
 		TransactionDefinition txDefinition = new DefaultTransactionDefinition();
 		 txStatus = transactionManager.getTransaction(txDefinition);
 		
-		user1 = new User("user1", "1234", "유저1", "1234@gg.com", "subName1", "010-1111-1111");
-		user2 = new User("user2", "2222", "유저2", "2222@gg.com", "subName2", "010-2222-2222");
-		user3 = new User("user3", "3333", "유저2", "3333@gg.com", "subName3", "010-3333-3333");
+		user1 = new UserForm("user1", "1234", "유저1", "1234@gg.com", "subName1", "010-1111-1111");
+		user2 = new UserForm("user2", "2222", "유저2", "2222@gg.com", "subName2", "010-2222-2222");
+		user3 = new UserForm("user3", "3333", "유저2", "3333@gg.com", "subName3", "010-3333-3333");
 	}
 	
 	@After
@@ -66,14 +67,16 @@ public class UserDaoTest {
 	
 	@Test
 	public void userCount() {
+		long count = userDao.getUserCount();
+		
 		userDao.join(user1);
-		assertThat(userDao.userCount(), is(1L));
+		assertThat(userDao.getUserCount(), is(++count));
 		
 		userDao.join(user2);
-		assertThat(userDao.userCount(), is(2L));
+		assertThat(userDao.getUserCount(), is(++count));
 		
 		userDao.join(user3);
-		assertThat(userDao.userCount(), is(3L));
+		assertThat(userDao.getUserCount(), is(++count));
 	}
 	
 	@Test(expected=DuplicateKeyException.class)
@@ -89,23 +92,23 @@ public class UserDaoTest {
 		User getUser1 = userDao.getUser(user1.getId());
 		isSameUser(user1, getUser1);
 		
-		user1.getUserInfo().setName("수정");
-		assertThat(user1.getUserInfo().getName(), is(not(getUser1.getUserInfo().getName())));
+		user1.setName("수정");
+		assertThat(user1.getName(), is(not(getUser1.getName())));
 		
 		userDao.update(user1);
 		getUser1 = userDao.getUser(user1.getId());
 		
-		assertThat(user1.getUserInfo().getName(), is(getUser1.getUserInfo().getName()));
+		assertThat(user1.getName(), is(getUser1.getName()));
 		
 	}
 	
 		
 	private void isSameUser(User user, User getUser) {
 		assertThat(user.getId(), is(getUser.getId()));
-		assertThat(user.getUserInfo().getName(), is(getUser.getUserInfo().getName()));
-		assertThat(user.getUserInfo().getEmail(), is(getUser.getUserInfo().getEmail()));
-		assertThat(user.getUserInfo().getSubName(), is(getUser.getUserInfo().getSubName()));
-		assertThat(user.getUserInfo().getPhoneNumber(), is(getUser.getUserInfo().getPhoneNumber()));
+		assertThat(user.getName(), is(getUser.getName()));
+		assertThat(user.getEmail(), is(getUser.getEmail()));
+		assertThat(user.getSubName(), is(getUser.getSubName()));
+		assertThat(user.getPhoneNumber(), is(getUser.getPhoneNumber()));
 	}
 	
 }

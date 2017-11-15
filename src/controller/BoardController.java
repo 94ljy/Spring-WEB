@@ -39,7 +39,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/write", method=RequestMethod.GET)
-	public String writeForm(HttpSession session) {
+	public String writeBoard(HttpSession session) {
 		String url;
 		if(session.getAttribute("user") == null)
 			url = "redirect:/board";
@@ -50,7 +50,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/write", method=RequestMethod.POST)
-	public String write(Board board, HttpSession session) {
+	public String writeBoard(Board board, HttpSession session) {
 		board.setUser((User)session.getAttribute("user"));
 		System.out.println(board.getBoardTitle());
 		boardService.addBoard(board);
@@ -59,12 +59,23 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/view/{boardNo}", method=RequestMethod.GET)
-	public String boardView(@PathVariable int boardNo, ModelMap model) {
+	public String boardView(@PathVariable int boardNo,@RequestParam(name="page", defaultValue="1") int page ,ModelMap model) {
 		Board board = boardService.getBoard(boardNo);
 		model.addAttribute("board", board);
 		model.addAttribute("replyTable", board.getReplyTable());
+		model.addAttribute("page",page);
 		
 		return "/WEB-INF/boardView.jsp";
+	}
+	
+	@RequestMapping(value="/del/{boardNo}")
+	public String boardView(@PathVariable int boardNo) {
+		Board board = new Board();
+		board.setBoardNo(boardNo);
+		
+		boardService.boardDelete(board);
+		
+		return "redirect:/board";
 	}
 	
 	
@@ -84,11 +95,53 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="reply/{boardNo}/page/{page}")
-	public String getReply(@PathVariable int boardNo,@PathVariable int page, ModelMap model) {
+	public String getReply(@PathVariable int boardNo, @PathVariable int page, ModelMap model) {
 		
-		model.addAttribute("replyTable", boardService.getReply(boardNo, page));
+		model.addAttribute("replyTable", boardService.getReplyTable(boardNo, page));
 		
 		return "/WEB-INF/boardReply.jsp";
 	}
+	
+	@RequestMapping(value="reply/modify")
+	@ResponseBody
+	public String replyModify(Reply reply){
+		if(boardService.replyModify(reply)) {
+			return "{success : true}";
+		}else {
+			return "{success : false}";
+		}
+	}
+	
+	@RequestMapping(value="reply/del/{replyNo}")
+	@ResponseBody
+	public String replyDelete(@PathVariable int replyNo) {
+		Reply reply = new Reply();
+		reply.setReplyNo(replyNo);
+		if(boardService.replyDelete(reply)) {
+			return "{success : true}";
+		}else {
+			return "{success : false}";
+		}
+	}
+	
+	
+	@RequestMapping(value="modify/{boardNo}" ,method=RequestMethod.GET)
+	public String boardModify(@PathVariable int boardNo, ModelMap model) {
+		Board board = boardService.getBoard(boardNo);
+		
+		model.addAttribute("board", board);
+		
+		return "/WEB-INF/boardModify.jsp";
+	}
+	
+	@RequestMapping(value="modify" ,method=RequestMethod.POST)
+	public String boardModify(@ModelAttribute Board board) {
+		boardService.updateBoard(board);
+		
+		return "redirect:/board/view/"+ board.getBoardNo();
+	}
+	
+	
+
 	
 }

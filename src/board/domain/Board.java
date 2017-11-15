@@ -1,7 +1,6 @@
 package board.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import user.domain.User;
 

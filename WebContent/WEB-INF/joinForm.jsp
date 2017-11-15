@@ -126,23 +126,23 @@ hr{
 			
 			<div class="input-group">
 				<span class="input-group-addon">이름</span> 
-				<input class="form-control" name="name" type="text" value="${user.userInfo.name}"/>
+				<input class="form-control" name="name" type="text" value="${user.name}"/>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">이메일</span> 
-				<input class="form-control" name="email" type="email" value="${user.userInfo.email}"/>
+				<input class="form-control" name="email" type="email" value="${user.email}"/>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">닉네임</span> 
-				<input class="form-control" name="subName" type="text" value="${user.userInfo.subName}"/>
+				<input class="form-control" name="subName" type="text" value="${user.subName}"/>
 				<span id="subNameCheck" class="input-group-addon btn" style="min-width: auto;">중복체크</span>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">전화번호</span> 
-				<input class="form-control" name="phoneNumber" type="text" value="${user.userInfo.phoneNumber}"/>
+				<input class="form-control" name="phoneNumber" type="text" value="${user.phoneNumber}"/>
 			</div>
 			
 			<button id="join" class="btn btn-default" type="button" style="margin-top:10px; width: 100%;">작성 완료</button>

@@ -2,33 +2,46 @@ package context;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
+
+import com.mysql.jdbc.Driver;
 
 import auth.service.AuthService;
 import board.dao.BoardDao;
 import board.service.BoardService;
-
 import user.dao.UserDao;
 
 @Configuration
 @EnableTransactionManagement
+@PropertySource("/db.properties")
 public class AppContext {
+	
+	@Value("${db.driverClass}")
+	Class<? extends Driver> driverClass;
+	@Value("${db.url}")
+	String url;
+	@Value("${db.username}")
+	String username;
+	@Value("${db.password}")
+	String password;
 
 	@Bean
 	public DataSource dataSource() {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		
-		dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
-		dataSource.setUrl("jdbc:mysql://localhost/springweb?characterEncoding=UTF-8");
-		dataSource.setUsername("root");
-		dataSource.setPassword("123456");
+		dataSource.setDriverClass(driverClass);
+		dataSource.setUrl(url);
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
 		
 		return dataSource;
 	}
@@ -39,6 +52,10 @@ public class AppContext {
 		return jdbcTemplate;
 	}
 	
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer(){
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {

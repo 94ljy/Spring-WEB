@@ -1,6 +1,7 @@
 package board.dao;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import board.domain.Board;
 import context.AppContext;
 import user.dao.UserDao;
-import user.domain.User;
+import user.domain.UserForm;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=AppContext.class)
@@ -34,7 +35,7 @@ public class BoardDaoTest {
 	PlatformTransactionManager transactionManager;
 	TransactionStatus txStatus;
 
-	User user;
+	UserForm user;
 	Board board1, board2;
 	
 	
@@ -42,9 +43,10 @@ public class BoardDaoTest {
 	public void init() {
 		TransactionDefinition txDefinition = new DefaultTransactionDefinition();
 		txStatus = transactionManager.getTransaction(txDefinition);
-		user = new User("test", "test", "test", "test", "test", "test");
+		user = new UserForm("test", "test", "test", "test", "test", "test");
 		board1 = new Board("力格1", "郴侩1", user);
 		board2 = new Board("力格2", "郴侩2", user);
+		userDao.join(user);
 	}
 	
 	@After

@@ -4,7 +4,7 @@ create table user(
 );
 
 
-create table userInfo(
+create table userinfo(
 	id varchar(20) not null unique,
 	name varchar(15) not null,
 	email varchar(30) not null,

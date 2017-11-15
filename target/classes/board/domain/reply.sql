@@ -6,4 +6,4 @@ create table reply(
 	board_no int not null,
 	foreign key(user_id) references user(id),
 	foreign key(board_no) references board(board_no)
-)
+);
