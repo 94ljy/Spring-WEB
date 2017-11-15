@@ -54,7 +54,11 @@ hr{
 
 	$(function() {
 		$('#join').click(function() {
-			$('#joinform').submit();
+			if(idCheck == true && subNameCheck == true && passwordCheck == true){
+				$('#joinform').submit();	
+			}else{
+				alert("가입 양식을 다시한번 확인해주세요");
+			}
 		});
 		
 		$('#idCheck').click(function() {

@@ -17,10 +17,17 @@
 	
 	<div style="display: table; width: 100%; height: 100%;">
 		<div style="display:table-cell;  height: 75%; vertical-align: middle;">
-			<h2 style="">게시판</h2>
+			<h2 style="">게시판  <button class="btn btn-default" style="float: right" onclick="location.href='/'">홈으로</button></h2>
 			<hr>
-			<h2 style="text-align: right;">${ user.subName }님 반갑습니다.</h2>
-			<button class="btn btn-default" style="float: right;" onclick="location.href='/auth/logout'">로그아웃</button>
+			<c:choose>
+				<c:when test="${user != null}">
+					<h2 style="text-align: right;">${ user.subName }님 반갑습니다.</h2>
+					<button class="btn btn-default" style="float: right;" onclick="location.href='/auth/logout'">로그아웃</button>
+				</c:when>
+				<c:otherwise>
+					<h2 style="text-align: right;">guest 님 반갑습니다.</h2>
+				</c:otherwise>
+			</c:choose>
 			<div class="board-list" style="min-height: 500px;">
 				<table class="table table-hover" style="margin: 0 auto; text-align: center;">
 					<thead>
@@ -65,7 +72,9 @@
 						</c:forEach>			
 					</ul>
 				</div>
-				<div class="btn btn-default"  style="float: right;"><a href="/board/write">글쓰기</a></div>
+				<c:if test="${user != null }">
+					<div class="btn btn-default"  style="float: right;"><a href="/board/write">글쓰기</a></div>
+				</c:if>
 			</div>
 		</div>
 	</div>

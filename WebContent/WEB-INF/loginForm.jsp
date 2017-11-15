@@ -8,17 +8,17 @@
 <link href="/assert/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="/assert/js/bootstrap.min.js"></script>
 <title>로그인</title>
-
-<script>
-	$()
-
-</script>
-
+<style>
+.input-group-addon{
+	min-width: 100px;
+}
+</style>
 </head>
 <body class="container">
 
 	<div style="display: table; height: 100%; margin: 0 auto;">
-		<div class="text-center" style="display: table-cell; vertical-align: middle; width: 500px;">
+		<div class="text-center" style="display: table-cell; vertical-align: middle; width: 500px; height: 400px;">
+			<h2 style="margin-bottom: 30px;">WEBCOME MY WEB</h2>
 			<form action="/auth/login" method="post">
 				
 				<div class="input-group">

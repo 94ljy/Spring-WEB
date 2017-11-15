@@ -88,13 +88,15 @@ hr {
 			<div id="reply">
 				<%@ include file="/WEB-INF/boardReply.jsp"  %>
 			</div>
-			<div class="input-group">
-				<textarea id="replyText" class="form-control" rows="3"></textarea>
-				<span id="writeReply" class="input-group-addon btn">댓글 달기</span>
-			</div>
+			<c:if test="${user != null}">
+				<div class="input-group">
+					<textarea id="replyText" class="form-control" rows="3"></textarea>
+					<span id="writeReply" class="input-group-addon btn">댓글 달기</span>
+				</div>
+			</c:if>
 		</div>
 		<div>
-			<button class="btn btn-default" onclick="location.href='/board/${page}'">뒤로가기</button>
+			<button class="btn btn-default" onclick="location.href='/board/${page}'">목록으로</button>
 		</div>
 	</div>
 
