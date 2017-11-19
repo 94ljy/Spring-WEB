@@ -12,8 +12,6 @@
 <title>게시판</title>
 </head>
 <body class="container" style="height: 100vh;">
-
-
 	
 	<div style="display: table; width: 100%; height: 100%;">
 		<div style="display:table-cell;  height: 75%; vertical-align: middle;">

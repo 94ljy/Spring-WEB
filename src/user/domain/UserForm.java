@@ -4,7 +4,6 @@ public class UserForm extends User{
 	
 	private String password;
 	
-	
 	public UserForm() {}
 	
 	public UserForm(String id, String password, String name, String email, String subName, String phoneNumber){

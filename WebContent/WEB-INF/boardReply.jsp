@@ -4,6 +4,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <script>
+
 	function replyModify(tag) {
 		var trTag= $(tag).closest("tr");
 		var contentTdTag = $(trTag.children()[2]);
@@ -49,6 +50,27 @@
 		});	
 	}
 	
+	
+	$(function() {
+		$('#writeReply').click(function() {
+			const reply = $('#replyText').val();
+			$.ajax({
+				type : 'post',
+				url : '/board/reply/write',
+				data : {
+					boardNo : pageBoardNo,
+					replyContent : reply
+				},
+				success : function(response) {
+					getReply(1);
+					$('#replyText').val("");
+				},error : function() {
+					alert("다시 시도해주세요");
+				}
+			});
+		});
+		
+	});
 	
 </script>
 <style>
@@ -110,3 +132,10 @@
 		<h3 class="text-center">댓글이 없습니다.</h3>
 	</c:otherwise>
 </c:choose>
+
+<c:if test="${user != null}">
+	<div class="input-group">
+		<textarea id="replyText" class="form-control" rows="3"></textarea>
+		<span id="writeReply" class="input-group-addon btn">댓글 달기</span>
+	</div>
+</c:if>

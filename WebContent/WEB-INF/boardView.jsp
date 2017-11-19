@@ -19,8 +19,12 @@ hr {
 <script>
 	var pageBoardNo = ${board.boardNo};
 	
+	$(function() {
+		getReply(1);
+	});
+	
 	function getReply(page) {
-		const divReply = $('#reply');
+		var divReply = $('#reply');
 		$.ajax({
 			type : 'post',
 			url : '/board/reply/'+ pageBoardNo + '/page/'+ page,
@@ -36,28 +40,6 @@ hr {
 			location.href="/board/del/"+boardNo;	
 		}
 	}
-	
-	
-	$(function() {
-		$('#writeReply').click(function() {
-			const reply = $('#replyText').val();
-			$.ajax({
-				type : 'post',
-				url : '/board/reply/write',
-				data : {
-					boardNo : pageBoardNo,
-					replyContent : reply
-				},
-				success : function(response) {
-					getReply(1);
-					$('#replyText').val("");
-				},error : function() {
-					alert("다시 시도해주세요");
-				}
-			});
-		});
-		
-	});
 </script>
 </head>
 <body class="container">
@@ -75,7 +57,7 @@ hr {
 		</div>
 		<hr>
 		<div class="board-content" style="height: auto; min-height: 300px;">
-			<p>${board.boardContent }</p>
+			<div>${board.boardContent }</div>
 		</div>
 		<div style="text-align: right;">
 			<c:if test="${user.id == board.user.id}">
@@ -86,14 +68,8 @@ hr {
 		<hr>
 		<div class="board-reply">
 			<div id="reply">
-				<%@ include file="/WEB-INF/boardReply.jsp"  %>
+				
 			</div>
-			<c:if test="${user != null}">
-				<div class="input-group">
-					<textarea id="replyText" class="form-control" rows="3"></textarea>
-					<span id="writeReply" class="input-group-addon btn">댓글 달기</span>
-				</div>
-			</c:if>
 		</div>
 		<div>
 			<button class="btn btn-default" onclick="location.href='/board/${page}'">목록으로</button>

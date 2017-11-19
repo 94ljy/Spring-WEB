@@ -114,7 +114,7 @@ hr{
 			<hr>
 			<div class="input-group">
 				<span class="input-group-addon">아이디</span> 
-				<input class="form-control" name="id" type="text" value="${user.id}"/>
+				<input class="form-control" name="id" type="text" value="${userForm.id}"/>
 				<span id="idCheck" class="input-group-addon btn" style="min-width: auto;">중복체크</span>
 			</div>
 			
@@ -130,23 +130,23 @@ hr{
 			
 			<div class="input-group">
 				<span class="input-group-addon">이름</span> 
-				<input class="form-control" name="name" type="text" value="${user.name}"/>
+				<input class="form-control" name="name" type="text" value="${userForm.name}"/>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">이메일</span> 
-				<input class="form-control" name="email" type="email" value="${user.email}"/>
+				<input class="form-control" name="email" type="email" value="${userForm.email}"/>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">닉네임</span> 
-				<input class="form-control" name="subName" type="text" value="${user.subName}"/>
+				<input class="form-control" name="subName" type="text" value="${userForm.subName}"/>
 				<span id="subNameCheck" class="input-group-addon btn" style="min-width: auto;">중복체크</span>
 			</div>
 			
 			<div class="input-group">
 				<span class="input-group-addon">전화번호</span> 
-				<input class="form-control" name="phoneNumber" type="text" value="${user.phoneNumber}"/>
+				<input class="form-control" name="phoneNumber" type="text" value="${userForm.phoneNumber}"/>
 			</div>
 			
 			<button id="join" class="btn btn-default" type="button" style="margin-top:10px; width: 100%;">작성 완료</button>

@@ -18,6 +18,8 @@ import com.mysql.jdbc.Driver;
 import auth.service.AuthService;
 import board.dao.BoardDao;
 import board.service.BoardService;
+import file.dao.FileDAO;
+import file.service.FileService;
 import user.dao.UserDao;
 
 @Configuration
@@ -80,6 +82,16 @@ public class AppContext {
 	@Bean
 	public BoardDao boardDao() {
 		return new BoardDao();
+	}
+	
+	@Bean
+	public FileService fileService() {
+		return new FileService();
+	}
+	
+	@Bean
+	public FileDAO fileDAO() {
+		return new FileDAO();
 	}
 	
 }

@@ -7,7 +7,7 @@
 <script src="/assert/js/jquery.min.js"></script>
 <link href="/assert/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="/assert/js/bootstrap.min.js"></script>
-<title>Insert title here</title>
+<title>Welcome</title>
 </head>
 <body class="container" style="height: 100vh;">
 	<div class="text-center"style="display: table; width: 100%; height: 100%;">

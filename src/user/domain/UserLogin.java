@@ -1,10 +1,9 @@
 package user.domain;
 
 public class UserLogin {
+	
 	private String id;
 	private String password;
-	
-	
 	
 	public String getId() {
 		return id;

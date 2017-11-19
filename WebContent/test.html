@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Summernote</title>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <script>
+  
+	$(function() {
+		$("#editor").summernote({
+			height : 500,
+			callbacks : {
+				onImageUpload : function(files, editor, welEditable) {
+					uploadFile(files, editor, welEditable)
+				}
+			}
+		});
+	});
+	
+  	function uploadFile(files, editor, welEditable) {
+  		
+  		var form = new FormData();
+  		form.append("file", files[0]);
+  		
+		$.ajax({
+			url : "/file",
+			type : "post",
+			data : form,
+			enctype : "multipart/form-data", 
+			processData : false,
+			contentType: false,
+			success : function(response) {
+				console.log(response);
+				$("#editor").summernote('insertImage', response.url);
+			},
+			error : function(error) {
+				console.log(error);
+			}
+		});
+	}
+  	
+  	function writeBoard() {
+  		var editor = $("#editor");
+		$("#content").val(editor.summernote("code"));
+		$("#form").submit();
+	}
+  	
+  	function success() {
+		
+	}
+  	
+  </script>
+</head>
+<body>
+  <div id="editor"><p>Hello Summernote</p></div>
+  <button onclick="success()">확인</button>
+</body>
+</html>
