@@ -20,6 +20,7 @@ public class FileService {
 		fileInfo.setRealName(multipartFile.getOriginalFilename());
 		
 		File filePath = new File(realPath + fileInfo.getFilePath());
+		System.out.println("path path!!!" + filePath.getAbsolutePath());
 		
 		try {
 			filePath.createNewFile();

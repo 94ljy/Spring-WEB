@@ -35,7 +35,7 @@ public class BoardController {
 		
 		BoardTable boardTable = boardService.getBoardTable(requestPage);
 		model.addAttribute("boardTable", boardTable);
-		return "/WEB-INF/boardList.jsp";
+		return "boardList";
 	}
 	
 	@RequestMapping(value="/write", method=RequestMethod.GET)
@@ -44,7 +44,7 @@ public class BoardController {
 		if(session.getAttribute("user") == null)
 			url = "redirect:/board";
 		else
-			url = "/WEB-INF/boardWrite.jsp";
+			url = "boardWrite";
 		
 		return url;
 	}
@@ -65,7 +65,7 @@ public class BoardController {
 		model.addAttribute("replyTable", board.getReplyTable());
 		model.addAttribute("page",page);
 		
-		return "/WEB-INF/boardView.jsp";
+		return "boardView";
 	}
 	
 	@RequestMapping(value="/del/{boardNo}")
@@ -99,7 +99,7 @@ public class BoardController {
 		
 		model.addAttribute("replyTable", boardService.getReplyTable(boardNo, page));
 		
-		return "/WEB-INF/boardReply.jsp";
+		return "boardReply";
 	}
 	
 	@RequestMapping(value="reply/modify")
@@ -131,7 +131,7 @@ public class BoardController {
 		
 		model.addAttribute("board", board);
 		
-		return "/WEB-INF/boardModify.jsp";
+		return "boardModify";
 	}
 	
 	@RequestMapping(value="modify" ,method=RequestMethod.POST)

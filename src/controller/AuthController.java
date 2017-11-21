@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
 import auth.service.AuthService;
-import user.domain.IsAble;
 import user.domain.UserForm;
 import user.domain.UserFormValidator;
 import user.domain.UserLogin;
@@ -33,7 +33,7 @@ public class AuthController {
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
 	public String joinForm(Model model) {
-		return "/WEB-INF/joinForm.jsp";
+		return "joinForm";
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
@@ -47,9 +47,9 @@ public class AuthController {
 		}else {
 			try {
 				authService.join(userForm);
-				url = "/WEB-INF/welcome.jsp";
+				url = "welcome";
 			}catch(Exception e){
-				url = "/WEB-INF/joinForm.jsp";
+				url = "joinForm";
 			}
 			
 		}
@@ -59,24 +59,26 @@ public class AuthController {
 	
 	@RequestMapping(value="/join/idCheck/{id}")
 	@ResponseBody
-	public IsAble idCheck(@PathVariable String id) {
-		IsAble result = new IsAble();
+	public Map<String, String> idCheck(@PathVariable String id) {
+		Map<String, String> result = new HashMap<>();
+		
 		if(authService.idCheck(id)) {
-			result.setAble(true);
+			result.put("able", "true");
 		}else {
-			result.setAble(false);
+			result.put("able", "false");
 		}
+		
 		return result;
 	}
 	
 	@RequestMapping(value="/join/subNameCheck/{subName}")
 	@ResponseBody
-	public IsAble subNameCheck(@PathVariable String subName) {
-		IsAble result = new IsAble();
+	public Map<String, String> subNameCheck(@PathVariable String subName) {
+		Map<String, String> result = new HashMap<>();
 		if(authService.subNameCheck(subName)) {
-			result.setAble(true);
+			result.put("able", "true");
 		}else {
-			result.setAble(false);
+			result.put("able", "false");
 		}
 		return result;
 	}
@@ -84,7 +86,7 @@ public class AuthController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String loginForm() {
-		return "/WEB-INF/loginForm.jsp";
+		return "loginForm";
 	}
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
@@ -95,7 +97,7 @@ public class AuthController {
 			session.setAttribute("user", authService.getUser(userLogin.getId()));
 			url = "redirect:/board";
 		}else {
-			url = "/WEB-INF/loginForm.jsp";
+			url = "loginForm";
 		}
 		
 		return url;
