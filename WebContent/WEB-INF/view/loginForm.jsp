@@ -14,8 +14,7 @@
 }
 </style>
 </head>
-<body class="container">
-
+<body class="container" style="height:100vh;">
 	<div style="display: table; height: 100%; margin: 0 auto;">
 		<div class="text-center" style="display: table-cell; vertical-align: middle; width: 500px; height: 400px;">
 			<h2 style="margin-bottom: 30px;">WEBCOME MY WEB</h2>
@@ -34,7 +33,6 @@
 			</form>
 			<button class="btn btn-default" onclick="location.href='/auth/join'">회원가입</button>
 		</div>
-
 	</div>
 </body>
 </html>

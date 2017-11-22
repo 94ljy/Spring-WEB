@@ -1,5 +1,7 @@
 package controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ChatController {
 	
 	@RequestMapping(value="/chat", method=RequestMethod.GET)
-	public String chat() {
-		return "chat";
+	public String chat(HttpSession session) {
+		
+		if(session.getAttribute("user") != null)
+			return "chat";
+		else 
+			return "redirect:/"; 
 	}
 	
 }

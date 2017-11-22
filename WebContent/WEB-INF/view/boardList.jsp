@@ -15,7 +15,13 @@
 	
 	<div style="display: table; width: 100%; height: 100%;">
 		<div style="display:table-cell;  height: 75%; vertical-align: middle;">
-			<h2 style="">게시판  <button class="btn btn-default" style="float: right" onclick="location.href='/'">홈으로</button></h2>
+			<h2 style="">
+				게시판  
+				<button class="btn btn-default" style="float: right" onclick="location.href='/'">홈으로</button>
+				<c:if test="${user != null }">
+					<button class="btn btn-default" style="float: right; margin-right: 50px;" onclick="location.href='/chat'">채팅입장</button>		
+				</c:if>
+			</h2>			
 			<hr>
 			<c:choose>
 				<c:when test="${user != null}">
