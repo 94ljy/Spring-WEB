@@ -16,10 +16,12 @@ import websocket.chat.client.Client;
 public class ChatServer extends TextWebSocketHandler{
 	
 	private Map<String, Client> clients;
+	private MessageMaker messageMaker;
 	
 	public ChatServer() {
 		super();
 		clients = new HashMap<>();
+		messageMaker = new MessageMaker();
 	}
 
 	@Override
@@ -28,50 +30,50 @@ public class ChatServer extends TextWebSocketHandler{
 		Client client = new Client();
 		client.setSession(session);
 		client.setUser(user);
-		
-		JSONObject sendMsg = new JSONObject();
-		sendMsg.put("type", "adminMsg");
-		sendMsg.put("message", "채팅에 접속 되었습니다." + client.getSubName() + "님  환영합니다.");		
-		client.sendMessage(sendMsg.toString());
-		
-		sendMsg = new JSONObject();
-		sendMsg.put("type", "adminMsg");
-		sendMsg.put("message", client.getSubName() + "님이 채팅을 입장했습니다.");
-		brodcastMessage(sendMsg.toString());
+			
+		String message = messageMaker.adminMsg("채팅에 접속 되었습니다." + client.getSubName() + "님  환영합니다.");	
+		unicastMessage(client, message);
+		message = messageMaker.list(clients);
+		unicastMessage(client, message);
 		
 		clients.put(session.getId(), client);
+		message = messageMaker.joinChat(client.getSubName());
+		
+		brodcastMessage(message);
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		JSONObject sendMsg = new JSONObject();
-		sendMsg.put("type", "adminMsg");
-		sendMsg.put("message", clients.get(session.getId()).getSubName() + "님이 채팅을 나갔습니다.");
-		clients.remove(session.getId());
-		brodcastMessage(sendMsg.toString());
+		Client client = clients.remove(session.getId());
+		String message = messageMaker.leaveChat(client.getSubName());
+		brodcastMessage(message);
 		super.afterConnectionClosed(session, status);
 	}
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		Client client = clients.get(session.getId());
 		JSONObject receiveMsg = new JSONObject(message.getPayload());
 		String type = receiveMsg.getString("type");
-		
+	
 		if(type.equals("msg")) {
-			JSONObject sendMsg = new JSONObject();
-			sendMsg.put("type", "msg");
-			sendMsg.put("name", clients.get(session.getId()).getSubName());
-			sendMsg.put("message", receiveMsg.getString("message"));
-			
-			brodcastMessage(sendMsg.toString());
+			String sendMsg = messageMaker.msg(client.getSubName(), receiveMsg);
+			brodcastMessage(sendMsg);
+		}else if(type.equals("list")) {
+			String sendMsg = messageMaker.list(clients);
+			unicastMessage(client, sendMsg);
 		}
 		
 	}
 	
-	private void brodcastMessage(String message) throws IOException {
+	public void brodcastMessage(String message) throws IOException {
 		for(Map.Entry<String, Client> entry: clients.entrySet()) {
 			entry.getValue().sendMessage(message);
 		}
 	}
 	
+	public void unicastMessage(Client client, String message) throws IOException {
+		client.sendMessage(message);
+	}
+
 }

@@ -9,8 +9,8 @@
 <script src="/assert/js/jquery.min.js"></script>
 <link href="/assert/css/bootstrap.min.css" rel="stylesheet"/>
 <script src="/assert/js/bootstrap.min.js"></script>
- <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
- <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 <title>글 작성</title>
 <script>
 	$(function() {

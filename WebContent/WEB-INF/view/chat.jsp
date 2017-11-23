@@ -13,11 +13,16 @@
 	color: gray;
 }
 .chatbox{
-	overflow : scroll;
-	overflow-x : hidden;
 	background : #fff;
 	border-color : #ddd;
 	border-width : 1px;
+	border-radius: 4px 4px 0 0;
+	border-style: solid;
+}
+.list{
+	height : 100%;
+	background : #fff;
+	border-color : #ddd;
 	border-radius: 4px 4px 0 0;
 	border-style: solid;
 }
@@ -54,12 +59,18 @@
 		if(data.type == "msg"){
 			typeMsg(data);
 		}else if(data.type == "adminMsg"){
-			typeAdmin(data);
+			typeAdminMsg(data);
+		}else if(data.type == "joinChat"){
+			typeJoinChat(data);
+		}else if(data.type == "leaveChat"){
+			typeLeaveChat(data);
+		}else if(data.type == "list"){
+			typeList(data);
 		}
 	}
 	
 	function onClose(){
-		$("#chatBox").append("<p class='admin-msg'>채팅 서버와 연결이 종료 되었습니다.</p>");
+		$("#chat").append("<p class='admin-msg'>채팅 서버와 연결이 종료 되었습니다.</p>");
 	}
 	
 	function sendMessage(){
@@ -69,22 +80,39 @@
 			type : "msg",
 			message : message
 		};
-		console.log(JSON.stringify(msg));
 		socket.send(JSON.stringify(msg));
 	}
 	
 	function typeMsg(data){
-		$("#chatBox").append("<p><b>" + data.name +"</b>: " + data.message + "</p>");
+		$("#chat").append("<p><b>" + data.name +"</b>: " + data.message + "</p>");
 		scrollDown();
 	}
 	
-	function typeAdmin(data) {
-		$("#chatBox").append("<p class='text-center admin-msg'>" + data.message + "</p>");
+	function typeAdminMsg(data) {
+		$("#chat").append("<p class='text-center admin-msg'>" + data.message + "</p>");
 		scrollDown();
+	}
+	
+	function typeList(data) {
+		data.list.forEach(function(value) {
+			$("#userList").append("<p class='text-center'>" + value + "</p>");	
+		})
+	}
+	
+	function typeJoinChat(data) {
+		$("#userList").append("<p class='text-center'>" + data.name + "</p>");	
+		$("#chat").append("<p class='text-center admin-msg'>" + data.name + "님이 채팅을 입장했습니다.</p>");
+	}
+	
+	function typeLeaveChat(data) {
+		var name = data.name;
+		var userList = $("#userList").find(":contains(" +name+ ")");
+		userList.remove();
+		$("#chat").append("<p class='text-center admin-msg'>" + data.name + "님이 채팅을 나갔습니다.</p>");
 	}
 	
 	function scrollDown(){
-		$("#chatBox").scrollTop(99999999);
+		$("#chat").scrollTop(99999999);
 	}
 	
 </script>
@@ -99,15 +127,19 @@
 			</h2>
 			<hr>
 			
-			<div id="chatBox" class="chatbox "  style="height: 400px;">
-				
+			<div class="chatbox"  style="height: 400px;">
+				<div id="chat" class="col-md-10" style="height : 100%;  overflow : scroll; overflow-x : hidden; ">
+				</div>
+				<div id="userList" class="col-md-2 list" >
+					
+				</div>
 			</div>
 			<div class="input-group" style="margin-top: 20px;">
 				<input class="form-control" name="message" type="text" >
 				<span class="input-group-addon btn" onclick="sendMessage()">전송</span>
 			</div>
 			<div style="margin-top: 20px;">
-				
+				<button class="btn" onclick="getList()">전송</button>
 			</div>
 		</div>
 	</div>
